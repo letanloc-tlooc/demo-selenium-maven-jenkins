@@ -45,82 +45,76 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class TestClass {
 
+    private static final String REPORT_FILE = "report.html";
+
     public static void main(String[] args) {
         WebDriver driver = new FirefoxDriver();
-        FileWriter htmlWriter = null;
+        String reportContent = readFile(REPORT_FILE);
+        StringBuilder updatedContent = new StringBuilder(reportContent);
 
         try {
-            // Tạo file HTML báo cáo
-            htmlWriter = new FileWriter("report.html");
-            htmlWriter.write("<!DOCTYPE html>\n");
-            htmlWriter.write("<html lang=\"en\">\n");
-            htmlWriter.write("<head>\n");
-            htmlWriter.write("    <meta charset=\"UTF-8\">\n");
-            htmlWriter.write("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
-            htmlWriter.write("    <title>Test Report</title>\n");
-            htmlWriter.write("    <style>\n");
-            htmlWriter.write("        body { font-family: Arial, sans-serif; margin: 20px; padding: 0; }\n");
-            htmlWriter.write("        h1 { color: #333; }\n");
-            htmlWriter.write("        ul { margin: 0; padding: 0; list-style-type: none; }\n");
-            htmlWriter.write("        li { margin: 5px 0; }\n");
-            htmlWriter.write("    </style>\n");
-            htmlWriter.write("</head>\n");
-            htmlWriter.write("<body>\n");
-            htmlWriter.write("    <h1>Test Report</h1>\n");
-            htmlWriter.write("    <ul>\n");
-
-            // Mở trang YouTube
+            // Thực hiện các bước kiểm tra
             driver.get("https://www.youtube.com/");
-            htmlWriter.write("        <li>Opened YouTube</li>\n");
+            updatedContent.append("<li>Opened YouTube</li>\n");
 
-            // Tìm kiếm hộp tìm kiếm và nhập từ khóa
             WebElement searchBox = driver.findElement(By.name("search_query"));
             searchBox.sendKeys("Thầy giáo Ba");
             searchBox.submit();
-            htmlWriter.write("        <li>Searched for 'Thầy giáo Ba'</li>\n");
+            updatedContent.append("<li>Searched for 'Thầy giáo Ba'</li>\n");
 
-            // Chờ một chút để kết quả tìm kiếm xuất hiện
             Thread.sleep(3000);
 
-            // Tìm kiếm kênh trong kết quả tìm kiếm
             WebElement firstResult = driver.findElement(By.xpath("(//a[@id='video-title'])[1]"));
             firstResult.click();
-            htmlWriter.write("        <li>Clicked on the first search result</li>\n");
+            updatedContent.append("<li>Clicked on the first search result</li>\n");
 
-            // Chờ thêm một chút để xem kết quả
             Thread.sleep(5000);
 
-            // Đóng báo cáo HTML
-            htmlWriter.write("    </ul>\n");
-            htmlWriter.write("</body>\n");
-            htmlWriter.write("</html>\n");
+            updatedContent.append("<p>Test completed successfully!</p>\n");
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-            try {
-                if (htmlWriter != null) {
-                    htmlWriter.write("        <li>Test interrupted</li>\n");
-                }
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        } catch (IOException e) {
+            updatedContent.append("<li>Test interrupted</li>\n");
+            updatedContent.append("<p>Test failed due to interruption!</p>\n");
+        } catch (Exception e) {
             e.printStackTrace();
+            updatedContent.append("<li>Test failed with error: " + e.getMessage() + "</li>\n");
+            updatedContent.append("<p>Test failed!</p>\n");
         } finally {
             // Đóng trình duyệt
             driver.quit();
-            if (htmlWriter != null) {
-                try {
-                    htmlWriter.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+            // Cập nhật tệp báo cáo HTML
+            writeFile(REPORT_FILE, updatedContent.toString());
+        }
+    }
+
+    private static String readFile(String fileName) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                content.append(line).append("\n");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+
+    private static void writeFile(String fileName, String content) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+            bw.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
