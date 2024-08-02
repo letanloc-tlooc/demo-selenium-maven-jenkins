@@ -16,7 +16,7 @@ public class ExtentReport {
 
 	public static void main(String[] args) {
 		ExtentReports extent = new ExtentReports();
-		ExtentSparkReporter spark = new ExtentSparkReporter("target/surefire-reports/Spark.html");
+		ExtentSparkReporter spark = new ExtentSparkReporter("Spark.html");
 		extent.attachReporter(spark);
 		
 		ExtentTest test1 = extent.createTest("Youtobe seartch","test youtobe");
