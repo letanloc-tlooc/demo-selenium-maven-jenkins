@@ -78,16 +78,16 @@ public class TestClass {
 
             Thread.sleep(5000);
 
-            updatedContent.append("<p>Test completed successfully!</p>\n");
+            updatedContent.append("<p id=\"test-status\">Test completed successfully!</p>\n");
 
         } catch (InterruptedException e) {
             e.printStackTrace();
             updatedContent.append("<li>Test interrupted</li>\n");
-            updatedContent.append("<p>Test failed due to interruption!</p>\n");
+            updatedContent.append("<p id=\"test-status\">Test failed due to interruption!</p>\n");
         } catch (Exception e) {
             e.printStackTrace();
             updatedContent.append("<li>Test failed with error: " + e.getMessage() + "</li>\n");
-            updatedContent.append("<p>Test failed!</p>\n");
+            updatedContent.append("<p id=\"test-status\">Test failed!</p>\n");
         } finally {
             // Đóng trình duyệt
             driver.quit();
@@ -118,3 +118,4 @@ public class TestClass {
         }
     }
 }
+
