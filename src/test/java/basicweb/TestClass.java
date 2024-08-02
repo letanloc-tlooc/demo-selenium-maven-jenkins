@@ -10,41 +10,34 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 
 public class TestClass {
 
-    private static ExtentReports extent;
-    private static ExtentTest test;
-
-    public static void main(String[] args) {
-        // Khởi tạo ExtentReports
-        ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter("extent.html");
-        extent = new ExtentReports();
-        extent.attachReporter(htmlReporter);
-
-        // Tạo báo cáo cho mỗi bài kiểm tra
-        test = extent.createTest("TestCase1");
-
-        WebDriver driver = new FirefoxDriver();
-
-        try {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		WebDriver driver = new FirefoxDriver();
+		try {
+            // Mở trang YouTube
             driver.get("https://www.youtube.com/");
-            test.pass("Opened YouTube successfully.");
 
+            // Tìm kiếm hộp tìm kiếm và nhập từ khóa
             WebElement searchBox = driver.findElement(By.name("search_query"));
             searchBox.sendKeys("Thầy giáo Ba");
             searchBox.submit();
-            test.pass("Searched for 'Thầy giáo Ba'.");
 
+            // Chờ một chút để kết quả tìm kiếm xuất hiện
             Thread.sleep(3000);
 
+            // Tìm kiếm kênh trong kết quả tìm kiếm (tùy thuộc vào cấu trúc trang web)
+            // Ví dụ: nhấp vào kết quả tìm kiếm đầu tiên
             WebElement firstResult = driver.findElement(By.xpath("(//a[@id='video-title'])[1]"));
             firstResult.click();
-            test.pass("Clicked on the first search result.");
 
+            // Chờ thêm một chút để xem kết quả (có thể loại bỏ nếu không cần thiết)
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            test.fail("Test failed with exception: " + e.getMessage());
+            e.printStackTrace();
         } finally {
+            // Đóng trình duyệt
             driver.quit();
-            extent.flush();  // Lưu báo cáo
         }
-    }
+	}
+
 }
