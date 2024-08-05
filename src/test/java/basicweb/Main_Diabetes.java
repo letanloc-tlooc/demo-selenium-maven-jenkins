@@ -16,8 +16,8 @@ public class Main_Diabetes {
     private static ExtentTest test;
 	public static void main(String[] args) {
 		extent = ExtentReport_Diabetes.getExtentReports();
-		runReadMoreTest();
-		runMemberTest();
+//		runReadMoreTest();
+//		runMemberTest();
 		runPatientInformationTest();
 		extent.flush();
 	}
@@ -92,22 +92,22 @@ public class Main_Diabetes {
 
         test.pass("Filled out the form with name: " + name + ", age: " + age + ", gender: " + gender + ", phone number: " + phoneNumber);
 
-        //WebElement submitButton = driver.findElement(By.name("submit"));
-        //submitButton.click();
-        //test.pass("/html/body/section[3]/div/form/button");
+        WebElement submitButton = driver.findElement(By.name("xacnhan"));
+        submitButton.submit();;
+        test.pass("//*[@id=\"xacnhan\"]");
         
-        try {
-            // Find the submit button using its text
-            WebElement submitButton = driver.findElement(By.xpath("button[text()='Xác nhận']"));
-            submitButton.click();
-            test.pass("/html/body/section[3]/div/form/button");
-        } catch (Exception e) {
-            test.fail("Clicking submit button failed with exception: " + e.getMessage());
-            // Fallback: Use JavaScript to submit the form
-            WebElement form = driver.findElement(By.tagName("form"));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].submit();", form);
-            test.pass("Form submitted using JavaScript");
-        }
+//        try {
+//            // Find the submit button using its text
+//            WebElement submitButton = driver.findElement(By.xpath("button[text()='Xác nhận']"));
+//            submitButton.click();
+//            test.pass("/html/body/section[3]/div/form/button");
+//        } catch (Exception e) {
+//            test.fail("Clicking submit button failed with exception: " + e.getMessage());
+//            // Fallback: Use JavaScript to submit the form
+//            WebElement form = driver.findElement(By.tagName("form"));
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].submit();", form);
+//            test.pass("Form submitted using JavaScript");
+//        }
     }
     public static void runPatientInformationTest() {
         test = extent.createTest("Access Patient Information", "Test accessing the Patient Information section on the website");
